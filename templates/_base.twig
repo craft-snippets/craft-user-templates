@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8" />
+    <title>{{entry.title ?? pageTitle ?? null}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="referrer" content="origin-when-cross-origin" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+    <br>
+    <div class="container">
+        <div class="box">
+            {% include '_user/partials/user-widget' %}
+            {% include '_user/partials/flash-messages' %}
+
+            {% if pageTitle is defined %}
+                <h1 class="title">{{pageTitle}}</h1>
+            {% endif %}
+            
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>

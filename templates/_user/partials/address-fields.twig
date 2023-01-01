@@ -1,0 +1,162 @@
+{% import '_user/partials/form-macros' as m %}
+
+{% if address.id %}
+	{{ hiddenInput('addressId', address.id) }}
+{% endif %}	
+
+{% set layoutElements = address.getFieldLayout().getElementsByType('craft\\fieldlayoutelements\\BaseField') %}
+{% for layoutElement in layoutElements %}
+
+	{# custom fields #}
+	{% if className(layoutElement) == 'craft\\fieldlayoutelements\\CustomField' %}
+		
+		{% set field = layoutElement.getField() %}
+		{% include '_user/partials/custom-fields' with {
+			model: address,
+			field: field,
+		} only %}
+		
+	{% else %}
+	{# native fields #}
+		{% switch className(layoutElement) %}
+			
+			{# label #}
+			{% case 'craft\\fieldlayoutelements\\addresses\\LabelField' %}
+				{{m.formFieldInput({
+					id: 'title',
+					type: 'text',
+					name: 'title',
+					value: address.title,
+					errors: address.getErrors('title'),
+					label: 'Label'|t('app'),
+				}) }}
+
+			{# country #}
+			{% case 'craft\\fieldlayoutelements\\addresses\\CountryCodeField' %}
+				{% set countries = craft.app.getAddresses().getCountryRepository().getAll()|map((value, key) => {
+					value: value.countryCode,
+					label: value.name,
+				}) %}			
+				{{m.formFieldSelect({
+					id: 'countryCode',
+					name: 'countryCode',			
+					value: address.countryCode,
+					options: countries,
+					errors: address.getErrors('countryCode'),
+					label: 'Country'|t('app'),
+				}) }}
+
+			{# tax id #}
+			{% case 'craft\\fieldlayoutelements\\addresses\\OrganizationTaxIdField' %}
+				{{m.formFieldInput({
+					id: 'organizationTaxId',
+					type: 'text',
+					name: 'organizationTaxId',
+					value: address.organizationTaxId,
+					errors: address.getErrors('organizationTaxId'),
+					label: 'Organization Tax ID'|t('app'),
+				}) }}
+
+			{# address #}
+			{% case 'craft\\fieldlayoutelements\\addresses\\AddressField' %}
+				{# address line1 #}
+				{{m.formFieldInput({
+					id: 'addressLine1',
+					type: 'text',
+					name: 'addressLine1',
+					value: address.addressLine1,
+					errors: address.getErrors('addressLine1'),
+					label: 'Address Line 1'|t('app'),
+				}) }}
+
+				{# address line 2 #}
+				{{m.formFieldInput({
+					id: 'addressLine2',
+					type: 'text',
+					name: 'addressLine2',
+					value: address.addressLine2,
+					errors: address.getErrors('addressLine2'),
+					label: 'Address Line 2'|t('app'),
+				}) }}
+
+				{# TODO #}
+				{# todo state #}
+				{{m.formFieldInput({
+					id: 'administrativeArea',
+					type: 'text',
+					name: 'administrativeArea',
+					value: address.administrativeArea,
+					errors: address.getErrors('administrativeArea'),
+					label: 'State'|t('app'),
+				}) }}
+
+				{# city #}
+				{{m.formFieldInput({
+					id: 'locality',
+					type: 'text',
+					name: 'locality',
+					value: address.locality,
+					errors: address.getErrors('locality'),
+					label: 'City'|t('app'),
+				}) }}
+
+				{# postal code #}
+				{{m.formFieldInput({
+					id: 'postalCode',
+					type: 'text',
+					name: 'postalCode',
+					value: address.postalCode,
+					errors: address.getErrors('postalCode'),
+					label: 'Zip Code'|t('app'),
+				}) }}
+
+			{# latitude longitude #}
+			{% case 'craft\\fieldlayoutelements\\addresses\\LatLongField' %}
+				{# latitude #}
+				{{m.formFieldInput({
+					id: 'latitude',
+					type: 'text',
+					name: 'latitude',
+					value: address.latitude,
+					errors: address.getErrors('latitude'),
+					label: 'Latitude'|t('app'),
+				}) }}
+
+				{# longitude #}
+				{{m.formFieldInput({
+					id: 'latitude',
+					type: 'text',
+					name: 'latitude',
+					value: address.latitude,
+					errors: address.getErrors('latitude'),
+					label: 'Latitude'|t('app'),
+				}) }}	
+
+			{# organisation #}
+			{% case 'craft\\fieldlayoutelements\\addresses\\OrganizationField' %}
+				{{m.formFieldInput({
+					id: 'organization',
+					type: 'text',
+					name: 'organization',
+					value: address.organization,
+					errors: address.getErrors('organization'),
+					label: 'Organization'|t('app'),
+				}) }}	
+
+			{# full name #}
+			{% case 'craft\\fieldlayoutelements\\FullNameField' %}
+				{{m.formFieldInput({
+					id: 'fullName',
+					type: 'text',
+					name: 'fullName',
+					value: address.fullName,
+					errors: address.getErrors('fullName'),
+					label: 'Full Name'|t('app'),
+				}) }}	
+
+
+		{% endswitch %}
+
+	{% endif %}
+
+{% endfor %}

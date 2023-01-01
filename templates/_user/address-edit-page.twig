@@ -1,0 +1,36 @@
+{% extends '_base' %}
+
+{% requireLogin %}
+
+{% set address = address ?? craft.addresses.id(addressId).one() %}
+
+{% if address is null %}
+  	{% exit 404 %}
+{% endif %}
+
+{% set pageTitle = 'Edit address'|t ~  (address.title ? ' ' ~ address.title) %}
+
+{% set submitButtonAttributes = {
+	text: 'Save'|t('app'),
+	type: 'submit',
+} %}
+
+{% block content %}
+
+	{% embed '_user/partials/base-form' %}
+
+		{% block formContent %}
+			{{ actionInput('users/save-address') }}
+			{{ redirectInput(url('addresses')) }}
+
+			{# common user fields #}
+			{% include '_user/partials/address-fields' %}		
+
+			{# submit button #}
+			{% import '_user/partials/form-macros' as m %}
+			{{m.formFieldButton(submitButtonAttributes)}}
+		{% endblock %}
+
+	{% endembed %}
+
+{% endblock %}

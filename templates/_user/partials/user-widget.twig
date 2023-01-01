@@ -1,0 +1,42 @@
+<div class="user-widget box">
+{% if currentUser %}
+	Logged in as <strong>{{currentUser.fullName}}</strong>
+	<br>
+	<a href="{{url('profile')}}">{{'Profile'|t}}</a>
+	<br>
+	<a href="{{url('addresses')}}">{{'Addresses'|t('app')}}</a>
+	<br>
+	<a href="{{url('logout')}}">{{'Sign out'|t('app')}}</a>
+{% else %}
+	<a href="{{url('register')}}">{{'Sign up'|t}}</a>
+	<br>
+	<a href="{{url('login')}}" data-a11y-dialog-show="login-modal">{{'Sign in'|t('app')}}</a>
+{% endif %}
+</div>
+
+{# login modal #}
+{% if craft.app.plugins.getPlugin('modal-component') %}
+		{% embed 'snippets-modal/modal' with {
+		    modalId: 'login-modal',
+		} %}
+			{% block content %}
+				{% apply namespaceAttributes('login-modal') %}
+				{% include '_user/partials/login-form' with {enableAutofocus: false} %}
+				{% endapply %}
+			{% endblock %}
+			{% block header %}
+				{{'Sign in'|t('app')}}
+			{% endblock %}
+		{% endembed %}
+
+		{# open modal on login link click instead of opening link #}
+		{% js %}
+		document.querySelector('[data-a11y-dialog-show="login-modal"]').addEventListener("click", function(e){
+			e.preventDefault();
+		});
+		{# autofocus popup #}
+		document.getElementById('login-modal').addEventListener('show', function (event) {
+		  document.querySelector('#login-modal input[data-enable-autofocus]').focus()
+		});
+		{% endjs %}
+{% endif %}

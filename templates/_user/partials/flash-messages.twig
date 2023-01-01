@@ -1,0 +1,15 @@
+{% set flashMessages = craft.app.session.getAllFlashes() %}
+{% for type, message in flashMessages %}
+	{% if type == 'error' %}
+		{% set flashClass = 'is-danger' %}
+	{% elseif type == 'notice' %}
+		{% set flashClass = 'is-info' %}
+	{% elseif type == 'success' %}
+		{% set flashClass = 'is-success' %}
+	{% endif %}
+<aside class="message {{flashClass ?? null}}">
+<div class="message-body">
+    {{ message }}
+</div>
+</aside>
+{% endfor %}

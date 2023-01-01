@@ -1,0 +1,161 @@
+{# settings #}
+{% set enableAutofocus = enableAutofocus ?? true %}
+
+{# html attributes #}
+{% set formAttributes = {
+	data: {
+		'login-form': true,
+	},
+} %}
+
+{% set loginName = craft.app.request.getBodyParam('loginName') is not null ? craft.app.request.getBodyParam('loginName') : craft.app.user.getRememberedUsername() %}
+
+{% set inputUsernameAttributes = {
+	type: craft.app.config.general.useEmailAsUsername ? 'email' : 'text',
+	name: 'loginName',
+	value: loginName,
+	id: 'login-username',
+	required: true,
+	autofocus: loginName is null and enableAutofocus ? true : false,
+	label: 'Username or Email'|t('app'),	
+	data: {
+		'enable-autofocus': craft.app.user.rememberedUsername is null,
+	},
+} %}
+
+{% set inputPasswordAttributes = {
+	type: 'password',
+	name: 'password',
+	id: 'login-password',
+	required: true,
+	autofocus: loginName is not null and enableAutofocus ? true : false,
+	label: 'Password'|t('app'),
+	data: {
+		'enable-autofocus': craft.app.user.rememberedUsername is not null,
+	},	
+} %}
+
+{% set inputRememberAttributes = {
+	name: 'rememberMe',
+	value: '1',
+	checked: craft.app.request.getBodyParam('rememberMe') == '1',
+	label: 'Keep me signed in'|t('app'),
+} %}
+
+{% set submitButtonAttributes = {
+	text: 'Login'|t('app'),
+	data: {
+		'login-form-button': true,
+		'login-form-button-loading-class': 'is-loading',
+	}
+} %}
+
+{# embed #}
+{% embed '_user/partials/base-form' with {
+	formAttributes: formAttributes,
+} %}
+
+	{% block formContent %}
+
+		{% import '_user/partials/form-macros' as m %}
+
+		<fieldset>
+
+			{# hidden fields #}
+			{{ actionInput('users/login') }}
+			{{ redirectInput(craft.app.user.returnUrl) }}
+
+			{# username #}
+			{{m.formFieldInput(inputUsernameAttributes)}}
+
+			{# password #}
+			{{m.formFieldInput(inputPasswordAttributes)}}
+
+			{# remember me #}
+			{{m.formFieldCheckbox(inputRememberAttributes)}}
+
+			{# submit button #}
+			{{m.formFieldButton(submitButtonAttributes)}}
+
+			{# forgot password link #}
+			{{tag('a', {
+				href: url('reset-password'),
+				text: 'Forgot your password?'|t('app'),
+			}) }}
+
+		</fieldset>	
+	{% endblock %}
+
+{% endembed %}
+
+{% js %}
+(function(){
+
+// translations
+let messageSuccess = {{'You have logged in. Redirecting...'|t|json_encode|raw}};
+let messageNetworkError = {{'Could not log in - check your internet connection'|t|json_encode|raw}};
+let messageServerError = {{'Something went wrong - could not log in.'|t|json_encode|raw}};
+
+formElements = document.querySelectorAll('[data-login-form]');
+
+formElements.forEach(formElement => {
+	formElement.addEventListener('submit', function(e){
+
+		e.preventDefault();
+		let formButton = formElement.querySelector('[data-login-form-button]');
+		let buttonLoadingClass = formButton.getAttribute('data-login-form-button-loading-class');
+		let formFieldset = formElement.querySelector('fieldset');
+
+		// serialize form
+		let formData = new FormData(formElement);
+
+		// request
+		let request = new XMLHttpRequest();
+		request.open("POST", window.location);
+		request.setRequestHeader('Accept', 'application/json');
+		request.send(formData);
+
+		// when start sending request
+		formButton.classList.add(buttonLoadingClass);
+		formFieldset.setAttribute('disabled', true);
+
+		request.onreadystatechange = function() {
+			if (request.readyState === 4) {
+				formButton.classList.remove(buttonLoadingClass);
+				formFieldset.removeAttribute("disabled");
+
+				var response = JSON.parse(request.responseText);
+
+				switch (request.status) {
+					// login success
+					case 200:
+						formButton.innerHTML = messageSuccess;
+						if(response['returnUrl'] !== undefined ){
+							window.location.href = response['returnUrl'];
+						}else{
+							location.reload();
+						}			    
+						break;
+					// login failure
+					case 400:
+						alert(response['message']);
+						break;
+					// server error
+					case 500:
+						alert(messageServerError);
+						break;
+					// network error	    
+					case 0:
+						alert(messageNetworkError);
+						break;
+				}
+
+
+			}
+		}
+
+	});
+});
+
+})();	
+{% endjs %}

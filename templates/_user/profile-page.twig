@@ -1,0 +1,33 @@
+{% extends '_base' %}
+
+{% requireLogin %}
+
+{% set pageTitle = 'Profile'|t %}
+
+{% set formUser = user ?? currentUser %}
+
+{% set submitButtonAttributes = {
+	text: 'Save'|t('app'),
+	type: 'submit',
+} %}
+
+{% block content %}
+
+	{# embed #}
+	{% embed '_user/partials/base-form' %}
+
+		{% block formContent %}
+			{{ actionInput('users/save-user') }}
+			{{ hiddenInput('userId', formUser.id) }}
+
+			{# common user fields #}
+			{% include '_user/partials/user-fields' %}
+
+			{# submit button #}
+			{% import '_user/partials/form-macros' as m %}
+			{{m.formFieldButton(submitButtonAttributes)}}
+		{% endblock %}
+
+	{% endembed %}
+
+{% endblock %}

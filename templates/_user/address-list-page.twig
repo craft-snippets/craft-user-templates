@@ -1,0 +1,58 @@
+{% extends '_base' %}
+
+{% requireLogin %}
+
+{% set pageTitle = 'Addresses'|t %}
+
+{% set addresses = currentUser.getAddresses() %}
+
+{% block content %}
+
+    {% if addresses | length %}
+    <ul class="address-list">
+      {% for address in addresses %}
+        <li>
+          {# address name #}
+          {{ address.title }}<br>
+
+          {# address edit link #}
+          {{tag('a', {
+              class: ['button'],
+              href: url("addresses/#{address.id}"),
+              text: 'Edit'|t('app'),
+          }) }}
+
+          {# address delete #}
+          <form method="post">
+            {{ csrfInput() }}
+            {{ actionInput('users/delete-address') }}
+            {{ hiddenInput('addressId', address.id) }}
+
+            <button class="button" type="submit">Delete</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+        {{'You haven’t added any addresses, yet!'|t}}
+    {% endif %}
+
+    {# Add new address link #}
+    <br>
+    {{tag('a', {
+    	href: url('addresses/new'),
+    	text: 'Add an address'|t('app'),
+    	class: ['button'],
+    }) }}
+
+{% endblock %}
+
+{% css %}
+.address-list{
+	list-style: square;
+}
+
+.address-list li{
+	margin-bottom: 1rem;
+}
+{% endcss %}

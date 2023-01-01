@@ -1,0 +1,32 @@
+{% extends '_base' %}
+
+{% requireLogin %}
+
+{% set address = address ?? create({ class: 'craft\\elements\\Address' }) %}
+
+{% set pageTitle = 'New address'|t %}
+
+{% set submitButtonAttributes = {
+	text: 'Save'|t('app'),
+	type: 'submit',
+} %}
+
+{% block content %}
+
+	{% embed '_user/partials/base-form' %}
+
+		{% block formContent %}
+			{{ actionInput('users/save-address') }}
+			{{ redirectInput(url('addresses')) }}
+
+			{# common user fields #}
+			{% include '_user/partials/address-fields' %}
+
+			{# submit button #}
+			{% import '_user/partials/form-macros' as m %}
+			{{m.formFieldButton(submitButtonAttributes)}}
+		{% endblock %}
+
+	{% endembed %}
+
+{% endblock %}

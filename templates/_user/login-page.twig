@@ -1,0 +1,11 @@
+{% extends '_base' %}
+
+{% requireGuest %}
+
+{% set pageTitle = 'Sign in'|t('app') %}
+
+{% block content %}
+
+{% include '_user/partials/login-form' %}
+
+{% endblock %}

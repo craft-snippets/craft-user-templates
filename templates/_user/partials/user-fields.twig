@@ -1,0 +1,77 @@
+{% import '_user/partials/form-macros' as m %}
+
+{% set inputUsernameAttributes = {
+	id: 'username',
+	type: 'text',
+	name: 'username',
+	value: formUser.username,
+	required: true,
+	errors: formUser.getErrors('username'),
+	label: 'Username'|t('app'),
+} %}
+
+{% set inputEmailAttributes = {
+	id: 'email',
+	type: 'email',
+	name: 'email',
+	value: formUser.email,
+	required: true,
+	errors: formUser.getErrors('email'),
+	label: 'Email'|t('app'),	
+} %}
+
+{% set inputFullNameAttributes = {
+   id: 'fullName',
+   type: 'text',
+   name: 'fullName',
+   value: formUser.fullName,
+   required: true,
+   errors: formUser.getErrors('fullName'),
+   label: 'Full Name'|t('app'),
+} %}
+
+{% set inputPasswordAttributes = {	
+	id: 'password',
+	type: 'password',
+	name: 'password',
+	required: formUser.id is null,
+	errors: formUser.id is not null ? formUser.getErrors('currentPassword') : formUser.getErrors('password'),
+	label: formUser.id is not null ? 'Current Password'|t('app') : 'Password'|t('app'),
+} %}
+
+{% set newPasswordInputAttributes = {
+	id: 'newPassword',
+	type: 'password',
+	name: 'newPassword',
+	errors: formUser.getErrors('newPassword'),
+	label: 'New Password'|t('app'),
+} %}
+
+
+{# username #}
+{% if not craft.app.config.general.useEmailAsUsername %}
+	{{m.formFieldInput(inputUsernameAttributes)}}
+{% endif %}
+
+{# email #}
+{{m.formFieldInput(inputEmailAttributes)}}
+
+{# full name #}
+{{m.formFieldInput(inputFullNameAttributes)}}
+
+{# custom fields #}
+{% set fieldsList = formUser.getFieldLayout().customFields %}
+{% for field in fieldsList %}
+	{% include '_user/partials/custom-fields' with {
+		model: formUser,
+		field: field,
+	} only %}
+{% endfor %}
+
+{# password #}
+{{m.formFieldInput(inputPasswordAttributes)}}
+
+{# new pasword #}
+{% if formUser.id is not null %}
+	{{m.formFieldInput(newPasswordInputAttributes)}}
+{% endif %}

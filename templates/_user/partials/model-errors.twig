@@ -1,0 +1,13 @@
+{% if model.hasErrors() %}
+<article class="message is-danger">
+    <div class="message-body">
+        {% for property in model.getErrors() %}
+            {% for error in property %}
+                {{ error }}
+                {% if not loop.last %}<br>{% endif %}
+            {% endfor %}
+            {% if not loop.last %}<br>{% endif %}
+        {% endfor %}
+    </div>
+</article>
+{% endif %}

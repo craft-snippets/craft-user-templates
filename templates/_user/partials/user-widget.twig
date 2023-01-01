@@ -1,16 +1,16 @@
 <div class="user-widget box">
 {% if currentUser %}
-	Logged in as <strong>{{currentUser.fullName}}</strong>
+	{{'Logged in as'|t}} <strong>{{currentUser.fullName}}</strong>
 	<br>
 	<a href="{{url('profile')}}">{{'Profile'|t}}</a>
 	<br>
 	<a href="{{url('addresses')}}">{{'Addresses'|t('app')}}</a>
 	<br>
-	<a href="{{url('logout')}}">{{'Sign out'|t('app')}}</a>
+	<a href="{{url(craft.app.config.general.logoutPath)}}">{{'Sign out'|t('app')}}</a>
 {% else %}
 	<a href="{{url('register')}}">{{'Sign up'|t}}</a>
 	<br>
-	<a href="{{url('login')}}" data-a11y-dialog-show="login-modal">{{'Sign in'|t('app')}}</a>
+	<a href="{{url(craft.app.config.general.loginPath)}}" data-a11y-dialog-show="login-modal">{{'Sign in'|t('app')}}</a>
 {% endif %}
 </div>
 

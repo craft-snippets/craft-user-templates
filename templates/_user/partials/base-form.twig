@@ -5,9 +5,9 @@
 {% set defaultFormAttributes = defaultFormAttributes|merge(formAttributes ?? {}) %}
 
 {# errors #}
-{# {% if formUser %}
+{# {% if user ?? address ?? null %}
 {% include '_user/partials/model-errors' with {
-	model: formUser,
+	model: user ?? address,
 } only %}
 {% endif %} #}
 

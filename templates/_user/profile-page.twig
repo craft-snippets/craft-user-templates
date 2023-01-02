@@ -4,7 +4,7 @@
 
 {% set pageTitle = 'Profile'|t %}
 
-{% set formUser = user ?? currentUser %}
+{% set user = user ?? currentUser %}
 
 {% set submitButtonAttributes = {
 	text: 'Save'|t('app'),
@@ -18,7 +18,7 @@
 
 		{% block formContent %}
 			{{ actionInput('users/save-user') }}
-			{{ hiddenInput('userId', formUser.id) }}
+			{{ hiddenInput('userId', user.id) }}
 
 			{# common user fields #}
 			{% include '_user/partials/user-fields' %}

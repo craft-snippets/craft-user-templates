@@ -4,9 +4,9 @@
 	id: 'username',
 	type: 'text',
 	name: 'username',
-	value: formUser.username,
+	value: user.username,
 	required: true,
-	errors: formUser.getErrors('username'),
+	errors: user.getErrors('username'),
 	label: 'Username'|t('app'),
 } %}
 
@@ -14,9 +14,9 @@
 	id: 'email',
 	type: 'email',
 	name: 'email',
-	value: formUser.email,
+	value: user.email,
 	required: true,
-	errors: formUser.getErrors('email'),
+	errors: user.getErrors('email'),
 	label: 'Email'|t('app'),	
 } %}
 
@@ -24,9 +24,9 @@
    id: 'fullName',
    type: 'text',
    name: 'fullName',
-   value: formUser.fullName,
+   value: user.fullName,
    required: true,
-   errors: formUser.getErrors('fullName'),
+   errors: user.getErrors('fullName'),
    label: 'Full Name'|t('app'),
 } %}
 
@@ -34,16 +34,16 @@
 	id: 'password',
 	type: 'password',
 	name: 'password',
-	required: formUser.id is null,
-	errors: formUser.id is not null ? formUser.getErrors('currentPassword') : formUser.getErrors('password'),
-	label: formUser.id is not null ? 'Current Password'|t('app') : 'Password'|t('app'),
+	required: user.id is null,
+	errors: user.id is not null ? user.getErrors('currentPassword') : user.getErrors('password'),
+	label: user.id is not null ? 'Current Password'|t('app') : 'Password'|t('app'),
 } %}
 
 {% set newPasswordInputAttributes = {
 	id: 'newPassword',
 	type: 'password',
 	name: 'newPassword',
-	errors: formUser.getErrors('newPassword'),
+	errors: user.getErrors('newPassword'),
 	label: 'New Password'|t('app'),
 } %}
 
@@ -60,10 +60,10 @@
 {{m.formFieldInput(inputFullNameAttributes)}}
 
 {# custom fields #}
-{% set fieldsList = formUser.getFieldLayout().customFields %}
+{% set fieldsList = user.getFieldLayout().customFields %}
 {% for field in fieldsList %}
 	{% include '_user/partials/custom-fields' with {
-		model: formUser,
+		model: user,
 		field: field,
 	} only %}
 {% endfor %}
@@ -72,6 +72,6 @@
 {{m.formFieldInput(inputPasswordAttributes)}}
 
 {# new pasword #}
-{% if formUser.id is not null %}
+{% if user.id is not null %}
 	{{m.formFieldInput(newPasswordInputAttributes)}}
 {% endif %}

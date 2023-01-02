@@ -6,6 +6,8 @@
 
 {% block content %}
 
-{% include '_user/partials/login-form' %}
+{% include '_user/partials/login-form' with {
+	enableAutofocus: true,
+} %}
 
 {% endblock %}

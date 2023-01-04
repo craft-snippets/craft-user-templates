@@ -17,11 +17,12 @@
 	id: 'login-username',
 	required: true,
 	autofocus: loginName is null and enableAutofocus ? true : false,
-	label: 'Username or Email'|t('app'),	
 	data: {
 		'enable-autofocus': craft.app.user.rememberedUsername is null,
 	},
 } %}
+
+{% set userNameLabel = 'Username or Email'|t('app') %}
 
 {% set inputPasswordAttributes = {
 	type: 'password',
@@ -29,11 +30,12 @@
 	id: 'login-password',
 	required: true,
 	autofocus: loginName is not null and enableAutofocus ? true : false,
-	label: 'Password'|t('app'),
 	data: {
 		'enable-autofocus': craft.app.user.rememberedUsername is not null,
 	},	
 } %}
+
+{% set passwordLabel = 'Password'|t('app') %}
 
 {% set inputRememberAttributes = {
 	name: 'rememberMe',
@@ -66,10 +68,10 @@
 			{{ redirectInput(craft.app.user.returnUrl) }}
 
 			{# username #}
-			{{m.formFieldInput(inputUsernameAttributes)}}
+			{{m.formFieldInput(inputUsernameAttributes, userNameLabel)}}
 
 			{# password #}
-			{{m.formFieldInput(inputPasswordAttributes)}}
+			{{m.formFieldInput(inputPasswordAttributes, passwordLabel)}}
 
 			{# remember me #}
 			{{m.formFieldCheckbox(inputRememberAttributes)}}

@@ -27,9 +27,7 @@
 					type: 'text',
 					name: 'title',
 					value: address.title,
-					errors: address.getErrors('title'),
-					label: 'Label'|t('app'),
-				}) }}
+				}, 'Label'|t('app'), address.getErrors('title')) }}
 
 			{# country #}
 			{% case 'craft\\fieldlayoutelements\\addresses\\CountryCodeField' %}
@@ -42,9 +40,7 @@
 					name: 'countryCode',			
 					value: address.countryCode,
 					options: countries,
-					errors: address.getErrors('countryCode'),
-					label: 'Country'|t('app'),
-				}) }}
+				}, 'Country'|t('app'), address.getErrors('countryCode')) }}
 
 			{# tax id #}
 			{% case 'craft\\fieldlayoutelements\\addresses\\OrganizationTaxIdField' %}
@@ -53,9 +49,7 @@
 					type: 'text',
 					name: 'organizationTaxId',
 					value: address.organizationTaxId,
-					errors: address.getErrors('organizationTaxId'),
-					label: 'Organization Tax ID'|t('app'),
-				}) }}
+				}, 'Organization Tax ID'|t('app'), address.getErrors('organizationTaxId')) }}
 
 			{# address #}
 			{% case 'craft\\fieldlayoutelements\\addresses\\AddressField' %}
@@ -65,9 +59,7 @@
 					type: 'text',
 					name: 'addressLine1',
 					value: address.addressLine1,
-					errors: address.getErrors('addressLine1'),
-					label: 'Address Line 1'|t('app'),
-				}) }}
+				}, 'Address Line 1'|t('app'), address.getErrors('addressLine1')) }}
 
 				{# address line 2 #}
 				{{m.formFieldInput({
@@ -75,9 +67,7 @@
 					type: 'text',
 					name: 'addressLine2',
 					value: address.addressLine2,
-					errors: address.getErrors('addressLine2'),
-					label: 'Address Line 2'|t('app'),
-				}) }}
+				}, 'Address Line 2'|t('app'), address.getErrors('addressLine2')) }}
 
 				{# TODO #}
 				{# todo state #}
@@ -86,9 +76,7 @@
 					type: 'text',
 					name: 'administrativeArea',
 					value: address.administrativeArea,
-					errors: address.getErrors('administrativeArea'),
-					label: 'State'|t('app'),
-				}) }}
+				}, 'State'|t('app'), address.getErrors('administrativeArea')) }}
 
 				{# city #}
 				{{m.formFieldInput({
@@ -96,9 +84,7 @@
 					type: 'text',
 					name: 'locality',
 					value: address.locality,
-					errors: address.getErrors('locality'),
-					label: 'City'|t('app'),
-				}) }}
+				}, 'City'|t('app'), address.getErrors('locality')) }}
 
 				{# postal code #}
 				{{m.formFieldInput({
@@ -106,9 +92,7 @@
 					type: 'text',
 					name: 'postalCode',
 					value: address.postalCode,
-					errors: address.getErrors('postalCode'),
-					label: 'Zip Code'|t('app'),
-				}) }}
+				}, 'Zip Code'|t('app'), address.getErrors('postalCode')) }}
 
 			{# latitude longitude #}
 			{% case 'craft\\fieldlayoutelements\\addresses\\LatLongField' %}
@@ -118,19 +102,15 @@
 					type: 'text',
 					name: 'latitude',
 					value: address.latitude,
-					errors: address.getErrors('latitude'),
-					label: 'Latitude'|t('app'),
-				}) }}
+				}, 'Latitude'|t('app'), address.getErrors('latitude')) }}
 
 				{# longitude #}
 				{{m.formFieldInput({
-					id: 'latitude',
+					id: 'longitude',
 					type: 'text',
-					name: 'latitude',
-					value: address.latitude,
-					errors: address.getErrors('latitude'),
-					label: 'Latitude'|t('app'),
-				}) }}	
+					name: 'longitude',
+					value: address.longitude,
+				}, 'Longitude'|t('app'), address.getErrors('longitude')) }}	
 
 			{# organisation #}
 			{% case 'craft\\fieldlayoutelements\\addresses\\OrganizationField' %}
@@ -139,9 +119,7 @@
 					type: 'text',
 					name: 'organization',
 					value: address.organization,
-					errors: address.getErrors('organization'),
-					label: 'Organization'|t('app'),
-				}) }}	
+				}, 'Organization'|t('app'), address.getErrors('organization')) }}	
 
 			{# full name #}
 			{% case 'craft\\fieldlayoutelements\\FullNameField' %}
@@ -150,9 +128,7 @@
 					type: 'text',
 					name: 'fullName',
 					value: address.fullName,
-					errors: address.getErrors('fullName'),
-					label: 'Full Name'|t('app'),
-				}) }}	
+				}, 'Full Name'|t('app'), address.getErrors('fullName')) }}	
 
 
 		{% endswitch %}

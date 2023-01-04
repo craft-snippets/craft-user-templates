@@ -6,19 +6,19 @@
 	name: 'username',
 	value: user.username,
 	required: true,
-	errors: user.getErrors('username'),
-	label: 'Username'|t('app'),
 } %}
+{% set usernameLabel = 'Username'|t('app') %}
+{% set usernameErrors = user.getErrors('username') %}
 
 {% set inputEmailAttributes = {
 	id: 'email',
 	type: 'email',
 	name: 'email',
 	value: user.email,
-	required: true,
-	errors: user.getErrors('email'),
-	label: 'Email'|t('app'),	
+	required: true,	
 } %}
+{% set emailLabel = 'Email'|t('app') %}
+{% set emailErrors = user.getErrors('email') %}
 
 {% set inputFullNameAttributes = {
    id: 'fullName',
@@ -26,38 +26,39 @@
    name: 'fullName',
    value: user.fullName,
    required: true,
-   errors: user.getErrors('fullName'),
-   label: 'Full Name'|t('app'),
 } %}
+{% set fullNameLabel = 'Full Name'|t('app') %}
+{% set fullNameErrors = user.getErrors('fullName') %}
 
 {% set inputPasswordAttributes = {	
 	id: 'password',
 	type: 'password',
 	name: 'password',
 	required: user.id is null,
-	errors: user.id is not null ? user.getErrors('currentPassword') : user.getErrors('password'),
-	label: user.id is not null ? 'Current Password'|t('app') : 'Password'|t('app'),
 } %}
+{% set passwordLabel = user.id is not null ? 'Current Password'|t('app') : 'Password'|t('app') %}
+{% set passwordErrors = user.id is not null ? user.getErrors('currentPassword') : user.getErrors('password') %}
 
 {% set newPasswordInputAttributes = {
 	id: 'newPassword',
 	type: 'password',
 	name: 'newPassword',
-	errors: user.getErrors('newPassword'),
-	label: 'New Password'|t('app'),
 } %}
+{% set newPasswordLabel = user.getErrors('newPassword') %}
+{% set newPasswordErrors = 'New Password'|t('app') %}
 
+{# output html #}
 
 {# username #}
 {% if not craft.app.config.general.useEmailAsUsername %}
-	{{m.formFieldInput(inputUsernameAttributes)}}
+	{{m.formFieldInput(inputUsernameAttributes, usernameLabel, usernameErrors)}}
 {% endif %}
 
 {# email #}
-{{m.formFieldInput(inputEmailAttributes)}}
+{{m.formFieldInput(inputEmailAttributes, emailLabel, emailErrors)}}
 
 {# full name #}
-{{m.formFieldInput(inputFullNameAttributes)}}
+{{m.formFieldInput(inputFullNameAttributes, fullNameLabel, fullNameErrors)}}
 
 {# custom fields #}
 {% set fieldsList = user.getFieldLayout().customFields %}
@@ -69,9 +70,9 @@
 {% endfor %}
 
 {# password #}
-{{m.formFieldInput(inputPasswordAttributes)}}
+{{m.formFieldInput(inputPasswordAttributes, passwordLabel, passwordErrors)}}
 
 {# new pasword #}
 {% if user.id is not null %}
-	{{m.formFieldInput(newPasswordInputAttributes)}}
+	{{m.formFieldInput(newPasswordInputAttributes, newPasswordLabel, newPasswordErrors)}}
 {% endif %}

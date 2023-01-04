@@ -10,18 +10,14 @@
 			type: 'text',
 			name: 'fields['~field.handle~']',			
 			value: model[field.handle],
-			errors: model.getErrors(field.handle),
-			label: field.name,
-		}) }}
+		}, field.name, model.getErrors(field.handle)) }}
 
 	{% case 'craft\\fields\\Lightswitch' %}
 		{{m.formFieldCheckbox({
 			id: field.handle,
 			name: 'fields['~field.handle~']',			
 			checked: model[field.handle],
-			errors: model.getErrors(field.handle),
-			label: field.name,
-		}) }}
+		}, field.name, model.getErrors(field.handle)) }}
 
 	{% case 'craft\\fields\\Dropdown' %}
 		{{m.formFieldSelect({
@@ -29,8 +25,6 @@
 			name: 'fields['~field.handle~']',			
 			value: model[field.handle],
 			options: field.options,
-			errors: model.getErrors(field.handle),
-			label: field.name,
-		}) }}
+		}, field.name, model.getErrors(field.handle)) }}
 
 {% endswitch %}

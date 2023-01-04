@@ -1,14 +1,14 @@
-{% macro formField(html, inputAttributes = {}) %}
+{% macro formField(html, inputAttributes = {}, errors) %}
 	{% set fieldAttributes = {
 		class: ['field'],
 	} %}	
 	<div {{attr(fieldAttributes)}}>
 		{{html|raw}}
 		{# errors #}
-		{% if inputAttributes.errors ?? false and inputAttributes.id ?? false %}
+		{% if errors is not empty and inputAttributes.id ?? false %}
 			{{tag('p', {
 				class: ['help', 'is-danger'],
-				text: inputAttributes.errors|join(' '),
+				text: errors|join(' '),
 				id: inputAttributes.id ~ '-errors',
 			}) }}
 		{% endif %}
@@ -23,7 +23,7 @@
 	{{tag('label', defaultLabelAttributes)}}
 {% endmacro %}
 
-{% macro formFieldInput(inputAttributes) %}
+{% macro formFieldInput(inputAttributes, label = null, errors = []) %}
 	{# defaults #}
 	{% set inputClasses = ['input'] %}
 		{# aria #}
@@ -31,7 +31,7 @@
 		required: inputAttributes.required ?? null,
 	} %}		
 	{# add error class #}
-	{% if inputAttributes.errors ?? [] %}
+	{% if errors is not empty %}
 		{% set inputClasses = inputClasses|merge(['is-danger']) %}
 	{% endif %}
 	{% set defaultInputAttributes = {
@@ -40,15 +40,15 @@
 	{% set defaultInputAttributes = defaultInputAttributes|merge(inputAttributes) %}
 	{% set html %}
 		{# label #}
-		{% if inputAttributes.label ?? null %}
+		{% if label %}
 			{% set labelAttributes = {
-				text: inputAttributes.label,
+				text: label,
 				for: inputAttributes.id ?? null,
 			} %}
 			{{_self.formLabel(labelAttributes)}}
 		{% endif %}
 		{# errors #}
-		{% if inputAttributes.errors ?? false and inputAttributes.errors is not empty %}
+		{% if errors is not empty %}
 			{% set ariaAttrs = ariaAttrs|merge({invalid: true}) %}
 			{% if inputAttributes.id ?? false %}
 				{% set ariaAttrs = ariaAttrs|merge({errormessage: inputAttributes.id ~ '-errors'}) %}
@@ -57,16 +57,13 @@
 		{# add aria attributes #}
 		{% set defaultInputAttributes = defaultInputAttributes|merge({aria: ariaAttrs}) %}
 		{# input #}
-		{# remove unnedeed attributes #}
-		{% set defaultInputAttributes = defaultInputAttributes|filter((val, key) => key != 'label') %}
-		{% set defaultInputAttributes = defaultInputAttributes|filter((val, key) => key != 'errors') %}		
 		{{tag('input', defaultInputAttributes)}}
 	{% endset %}
 	{# wrap in field container #}
-	{{_self.formField(html, inputAttributes)}}
+	{{_self.formField(html, inputAttributes, errors)}}
 {% endmacro %}
 
-{% macro formFieldCheckbox(inputParams) %}
+{% macro formFieldCheckbox(inputAttributes, label = null, errors = []) %}
 	{# defaults #}
 	{% set defaultInputAttributes = {
 		type: 'checkbox',
@@ -76,40 +73,37 @@
 	} %}
 	{# aria #}
 	{% set ariaAttrs = {
-		required: inputParams.required ?? null,
+		required: inputAttributes.required ?? null,
 	} %}	
 	{# errors #}
-	{% if inputParams.errors ?? false and inputParams.errors is not empty %}
+	{% if errors is not empty %}
 		{% set ariaAttrs = ariaAttrs|merge({invalid: true}) %}
-		{% if inputParams.id ?? false %}
-			{% set ariaAttrs = ariaAttrs|merge({errormessage: inputParams.id ~ '-errors'}) %}
+		{% if inputAttributes.id ?? false %}
+			{% set ariaAttrs = ariaAttrs|merge({errormessage: inputAttributes.id ~ '-errors'}) %}
 		{% endif %}			
 	{% endif %}
 	{# add aria attributes #}
 	{% set defaultInputAttributes = defaultInputAttributes|merge({aria: ariaAttrs}) %}
 	{# label text and input #}
-	{% set defaultInputAttributes = defaultInputAttributes|merge(inputParams) %}
+	{% set defaultInputAttributes = defaultInputAttributes|merge(inputAttributes) %}
 	{% set insideHtml %}
 		{{ hiddenInput(defaultInputAttributes.name, '0') }}
 		{{tag('input', defaultInputAttributes)}}
-		{{defaultInputAttributes.label ?? null}}
+		{{label}}
 	{% endset %}
 	{# wrap label text and input in label element #}
 	{% set htmlField %}
-		{% set defaultLabelAttributes = defaultLabelAttributes|merge({html: insideHtml}) %}
-		{# remove unnedeed attributes #}
-		{% set defaultLabelAttributes = defaultLabelAttributes|filter((val, key) => key != 'label') %}
-		{% set defaultLabelAttributes = defaultLabelAttributes|filter((val, key) => key != 'errors') %}				
+		{% set defaultLabelAttributes = defaultLabelAttributes|merge({html: insideHtml}) %}			
 		{{_self.formLabel(defaultLabelAttributes)}}
 	{% endset %}
 	{# wrap in field container #}
-	{{_self.formField(htmlField, defaultInputAttributes)}}	
+	{{_self.formField(htmlField, defaultInputAttributes, errors)}}	
 {% endmacro %}
 
-{% macro formFieldSelect(selectAttributes) %}	
+{% macro formFieldSelect(selectAttributes, label = null, errors = []) %}	
 	{# defaults #}
 	{% set selectWrapperAttributes = {
-		class: ['select', (inputAttributes.errors ?? [] ? 'is-danger')],
+		class: ['select', (errors is not empty ? 'is-danger')],
 	} %}
 	{% set defaultSetectAttributes = {
 
@@ -121,9 +115,9 @@
 	{% set defaultSetectAttributes = defaultSetectAttributes|merge(selectAttributes) %}
 	{% set html %}		
 		{# label #}
-		{% if selectAttributes.label ?? null %}
+		{% if label %}
 			{% set labelAttributes = {
-				text: selectAttributes.label,
+				text: label,
 				for: selectAttributes.id ?? null,
 			} %}
 			{{_self.formLabel(labelAttributes)}}
@@ -131,16 +125,13 @@
 		{# select wrapper #}
 		<div {{attr(selectWrapperAttributes)}}>			
 			{# errors #}
-			{% if selectAttributes.errors ?? false and selectAttributes.errors is not empty %}
+			{% if errors is not empty %}
 				{% set ariaAttrs = ariaAttrs|merge({invalid: true}) %}
 				{% if selectAttributes.id ?? false %}
 					{% set ariaAttrs = ariaAttrs|merge({errormessage: selectAttributes.id ~ '-errors'}) %}
 				{% endif %}				
 			{% endif %}
-			{% set defaultSetectAttributes = defaultSetectAttributes|merge({aria: ariaAttrs}) %}
-			{# remove unnedeed attributes #}
-			{% set defaultSetectAttributes = defaultSetectAttributes|filter((val, key) => key != 'label') %}
-			{% set defaultSetectAttributes = defaultSetectAttributes|filter((val, key) => key != 'errors') %}					
+			{% set defaultSetectAttributes = defaultSetectAttributes|merge({aria: ariaAttrs}) %}				
 			{# select #}
 			<select {{attr(defaultSetectAttributes)}}>
 			{% for option in defaultSetectAttributes.options %}
@@ -154,7 +145,7 @@
 		</div>
 	{% endset %}
 	{# wrap in field container #}
-	{{_self.formField(html, defaultSetectAttributes)}}
+	{{_self.formField(html, defaultSetectAttributes, errors)}}
 {% endmacro %}
 
 {% macro formFieldButton(buttonParams) %}

@@ -44,8 +44,8 @@
 	type: 'password',
 	name: 'newPassword',
 } %}
-{% set newPasswordLabel = user.getErrors('newPassword') %}
-{% set newPasswordErrors = 'New Password'|t('app') %}
+{% set newPasswordLabel = 'New Password'|t('app') %}
+{% set newPasswordErrors = user.getErrors('newPassword') %}
 
 {# output html #}
 

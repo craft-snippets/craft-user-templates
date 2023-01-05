@@ -11,24 +11,24 @@
     {% if addresses | length %}
     <ul class="address-list">
       {% for address in addresses %}
-        <li>
-          {# address name #}
-          {{ address.title }}<br>
+        <li class="box address-list__single">
 
           {# address edit link #}
           {{tag('a', {
-              class: ['button'],
               href: url("addresses/#{address.id}"),
-              text: 'Edit'|t('app'),
+              text: address.title,
           }) }}
 
           {# address delete #}
           <form method="post">
-            {{ csrfInput() }}
-            {{ actionInput('users/delete-address') }}
-            {{ hiddenInput('addressId', address.id) }}
-
-            <button class="button" type="submit">Delete</button>
+              {{ csrfInput() }}
+              {{ actionInput('users/delete-address') }}
+              {{ hiddenInput('addressId', address.id) }}
+              {{tag('button', {
+                class: ['button', 'address-list__delete'],
+                type: 'submit',
+                text: 'Delete'|t('app'),
+              }) }}
           </form>
         </li>
       {% endfor %}
@@ -37,8 +37,7 @@
         {{'You haven’t added any addresses, yet!'|t}}
     {% endif %}
 
-    {# Add new address link #}
-    <br>
+    {# Add new address link #}    
     {{tag('a', {
     	href: url('addresses/new'),
     	text: 'Add an address'|t('app'),
@@ -47,12 +46,17 @@
 
 {% endblock %}
 
+{# example styles #}
 {% css %}
 .address-list{
-	list-style: square;
+	list-style: none;
 }
-
-.address-list li{
-	margin-bottom: 1rem;
+.address-list__single{
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;  
+}
+.address-list__delete{
+  margin-left: 1rem;
 }
 {% endcss %}

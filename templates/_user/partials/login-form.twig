@@ -41,8 +41,8 @@
 	name: 'rememberMe',
 	value: '1',
 	checked: craft.app.request.getBodyParam('rememberMe') == '1',
-	label: 'Keep me signed in'|t('app'),
 } %}
+{% set rememberLabel = 'Keep me signed in'|t('app') %}
 
 {% set submitButtonAttributes = {
 	text: 'Login'|t('app'),
@@ -74,7 +74,7 @@
 			{{m.formFieldInput(inputPasswordAttributes, passwordLabel)}}
 
 			{# remember me #}
-			{{m.formFieldCheckbox(inputRememberAttributes)}}
+			{{m.formFieldCheckbox(inputRememberAttributes, rememberLabel)}}
 
 			{# submit button #}
 			{{m.formFieldButton(submitButtonAttributes)}}

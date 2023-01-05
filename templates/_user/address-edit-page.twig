@@ -8,7 +8,7 @@
   	{% exit 404 %}
 {% endif %}
 
-{% set pageTitle = 'Edit address'|t ~  (address.title ? ' ' ~ address.title) %}
+{% set pageTitle = 'Edit address'|t ~  (address.title ? ' "' ~ address.title) ~ '"' %}
 
 {% set submitButtonAttributes = {
 	text: 'Save'|t('app'),

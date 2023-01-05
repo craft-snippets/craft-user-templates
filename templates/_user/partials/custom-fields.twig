@@ -1,6 +1,5 @@
 {# requires "model" and "field" objects #}
 {% import '_user/partials/form-macros' as m %}
-
 {% set class = className(field) %}
 {% switch class %}
 
@@ -10,6 +9,7 @@
 			type: 'text',
 			name: 'fields['~field.handle~']',			
 			value: model[field.handle],
+			required: field.required,
 		}, field.name, model.getErrors(field.handle)) }}
 
 	{% case 'craft\\fields\\Lightswitch' %}
@@ -17,6 +17,7 @@
 			id: field.handle,
 			name: 'fields['~field.handle~']',			
 			checked: model[field.handle],
+			required: field.required,
 		}, field.name, model.getErrors(field.handle)) }}
 
 	{% case 'craft\\fields\\Dropdown' %}
@@ -24,7 +25,7 @@
 			id: field.handle,
 			name: 'fields['~field.handle~']',			
 			value: model[field.handle],
-			options: field.options,
-		}, field.name, model.getErrors(field.handle)) }}
+			required: field.required,
+		}, field.name, field.options, model.getErrors(field.handle)) }}
 
 {% endswitch %}

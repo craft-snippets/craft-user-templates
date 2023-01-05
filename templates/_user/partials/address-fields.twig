@@ -27,11 +27,12 @@
 					type: 'text',
 					name: 'title',
 					value: address.title,
+					required: true,
 				}, 'Label'|t('app'), address.getErrors('title')) }}
 
 			{# country #}
 			{% case 'craft\\fieldlayoutelements\\addresses\\CountryCodeField' %}
-				{% set countries = craft.app.getAddresses().getCountryRepository().getAll()|map((value, key) => {
+				{% set countries = craft.app.getAddresses().getCountryRepository().getAll(currentSite.language)|map((value, key) => {
 					value: value.countryCode,
 					label: value.name,
 				}) %}			
@@ -39,8 +40,7 @@
 					id: 'countryCode',
 					name: 'countryCode',			
 					value: address.countryCode,
-					options: countries,
-				}, 'Country'|t('app'), address.getErrors('countryCode')) }}
+				}, 'Country'|t('app'), countries, address.getErrors('countryCode')) }}
 
 			{# tax id #}
 			{% case 'craft\\fieldlayoutelements\\addresses\\OrganizationTaxIdField' %}
@@ -53,12 +53,13 @@
 
 			{# address #}
 			{% case 'craft\\fieldlayoutelements\\addresses\\AddressField' %}
-				{# address line1 #}
+				{# address line 1 #}
 				{{m.formFieldInput({
 					id: 'addressLine1',
 					type: 'text',
 					name: 'addressLine1',
 					value: address.addressLine1,
+					required: true,
 				}, 'Address Line 1'|t('app'), address.getErrors('addressLine1')) }}
 
 				{# address line 2 #}
@@ -69,7 +70,6 @@
 					value: address.addressLine2,
 				}, 'Address Line 2'|t('app'), address.getErrors('addressLine2')) }}
 
-				{# TODO #}
 				{# todo state #}
 				{{m.formFieldInput({
 					id: 'administrativeArea',
@@ -84,6 +84,7 @@
 					type: 'text',
 					name: 'locality',
 					value: address.locality,
+					required: true,
 				}, 'City'|t('app'), address.getErrors('locality')) }}
 
 				{# postal code #}

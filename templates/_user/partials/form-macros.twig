@@ -1,6 +1,6 @@
 {% macro formField(html, inputAttributes = {}, errors) %}
 	{% set fieldAttributes = {
-		class: ['field'],
+		class: ['field', (inputAttributes.required ?? false) ? 'is-required'],
 	} %}	
 	<div {{attr(fieldAttributes)}}>
 		{{html|raw}}
@@ -100,7 +100,7 @@
 	{{_self.formField(htmlField, defaultInputAttributes, errors)}}	
 {% endmacro %}
 
-{% macro formFieldSelect(selectAttributes, label = null, errors = []) %}	
+{% macro formFieldSelect(selectAttributes, label = null, options = [], errors = []) %}	
 	{# defaults #}
 	{% set selectWrapperAttributes = {
 		class: ['select', (errors is not empty ? 'is-danger')],
@@ -134,7 +134,7 @@
 			{% set defaultSetectAttributes = defaultSetectAttributes|merge({aria: ariaAttrs}) %}				
 			{# select #}
 			<select {{attr(defaultSetectAttributes)}}>
-			{% for option in defaultSetectAttributes.options %}
+			{% for option in options %}
 				{{tag('option', {
 					value: option.value,
 					label: option.label,

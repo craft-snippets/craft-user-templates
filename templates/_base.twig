@@ -25,12 +25,21 @@
 </body>
 </html>
 
-{# example styles #}
 {% css %}
+{# example styles #}
 .container{
     max-width: 30rem !important;
 }
 .user-widget a{
     margin-right: 0.5rem;
+}
+{# show requried fields - but not in login form #}
+.is-required label:after{
+    content: '*';
+    color: red;
+    margin-left: 0.5rem;
+}
+.login-form .is-required label:after{
+    content: '';
 }
 {% endcss %}

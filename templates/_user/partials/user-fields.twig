@@ -80,7 +80,10 @@
 {{m.formFieldInput(inputFullNameAttributes, fullNameLabel, fullNameErrors)}}
 
 {# photo #}
-{% if user.id is not null %}
+{% set userVolumeUid = craft.app.projectConfig.get('users')['photoVolumeUid'] %}
+{% set userVolume = userVolumeUid ? craft.app.volumes.getVolumeByUid(userVolumeUid) : null %}
+{% set userVolumeHasPublicUrls = userVolume ? userVolume.fs.hasUrls : false %}
+{% if user.id is not null and userVolumeHasPublicUrls %}
 	{% if user.photo %}
 		{# show uploaded photo and remove checkbox #}
 		{{m.formLabel(photoLabel) }}

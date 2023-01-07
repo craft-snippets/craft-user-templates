@@ -1,4 +1,4 @@
-{% macro formField(html, inputAttributes = {}, errors) %}
+{% macro formField(html, inputAttributes = {}, errors = []) %}
 	{% set fieldAttributes = {
 		class: ['field', (inputAttributes.required ?? false) ? 'is-required'],
 	} %}	

@@ -47,6 +47,25 @@
 {% set newPasswordLabel = 'New Password'|t('app') %}
 {% set newPasswordErrors = user.getErrors('newPassword') %}
 
+{% set photoLabel = {
+	text: 'Photo'|t('app'),
+} %}
+{% set uploadPhotoAttributes = {
+	type: 'file',
+	name: 'photo',
+	id: 'photo',
+	accept: 'image/png,image/jpeg',	
+} %}
+{% set uploadPhotoLabel = user.photo ? 'Change photo'|t('app') : 'Upload a photo'|t('app') %}
+{% set uploadPhotoErrors = user.getErrors('photo') %}
+
+{% set removePhotoAttributes = {
+	name: 'deletePhoto',
+	id: 'deletePhoto',
+	value: '1',
+} %}
+{% set removePhotoLabel = 'Delete photo'|t('app') %}
+
 {# output html #}
 
 {# username #}
@@ -59,6 +78,18 @@
 
 {# full name #}
 {{m.formFieldInput(inputFullNameAttributes, fullNameLabel, fullNameErrors)}}
+
+{# photo #}
+{% if user.id is not null %}
+	{% if user.photo %}
+		{# show uploaded photo and remove checkbox #}
+		{{m.formLabel(photoLabel) }}
+    {{ user.photo.getImg({width: 150, height: 150}) }}
+    {{m.formFieldCheckbox(removePhotoAttributes, removePhotoLabel)}}
+	{% endif %}
+	{# upload input #}
+	{{m.formFieldInput(uploadPhotoAttributes, uploadPhotoLabel, uploadPhotoErrors)}}
+{% endif %}
 
 {# custom fields #}
 {% set fieldsList = user.getFieldLayout().customFields %}

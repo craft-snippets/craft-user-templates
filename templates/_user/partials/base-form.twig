@@ -1,6 +1,7 @@
 {% set defaultFormAttributes = {
 	method: 'post',
 	'accept-charset': 'UTF-8',
+	enctype: 'multipart/form-data',
 } %}
 {% set defaultFormAttributes = defaultFormAttributes|merge(formAttributes ?? {}) %}
 

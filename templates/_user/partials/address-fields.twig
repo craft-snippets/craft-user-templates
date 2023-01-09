@@ -70,12 +70,13 @@
 					value: address.addressLine2,
 				}, 'Address Line 2'|t('app'), address.getErrors('addressLine2')) }}
 
-				{# todo state #}
+				{# state #}
 				{{m.formFieldInput({
 					id: 'administrativeArea',
 					type: 'text',
 					name: 'administrativeArea',
 					value: address.administrativeArea,
+					required: true,
 				}, 'State'|t('app'), address.getErrors('administrativeArea')) }}
 
 				{# city #}
@@ -93,6 +94,7 @@
 					type: 'text',
 					name: 'postalCode',
 					value: address.postalCode,
+					required: true,
 				}, 'Zip Code'|t('app'), address.getErrors('postalCode')) }}
 
 			{# latitude longitude #}

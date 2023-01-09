@@ -20,6 +20,11 @@
 			{{ actionInput('users/save-user') }}
 			{{ redirectInput(alias(currentSite.baseUrl)) }}
 
+			{# success message #}
+			{% if craft.app.projectConfig.get('users')['requireEmailVerification'] == true %}
+				{{ successMessageInput('User registered. Please verify your email using the link we sent to your email address.'|t) }}
+			{% endif %}
+
 			{# common user fields #}
 			{% include '_user/partials/user-fields' %}
 

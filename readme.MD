@@ -1,4 +1,4 @@
-This repository is the integral part of artycle LINK AND NAME HERE. It contains ready to use set of frontend user manangment templates for Craft CMS 4:
+This repository is the integral part of artycle [User account management with Craft CMS](https://blog.fortrabbit.com/craft-cms-frontend-testing-with-codeception-and-cypress). It contains ready to use set of frontend user manangment templates for Craft CMS 4:
 
 * Login form. Ajax-based, displayed in a modal or on a separate page.
 * Registration and profile edit forms, automatically outputting any additional fields assigned to the user field layout.
